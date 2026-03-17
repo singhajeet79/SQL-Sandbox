@@ -47,13 +47,13 @@ docker exec -it sql-db psql -U admin -d employees
 ## 📊 Database Schema
 The hr_schema dataset mimics a real-world enterprise structure:
 
-   * employees: Core staff records (ID, birth date, names, hire date).
+   * employee: Core staff records (ID, birth date, names, hire date).
 
-   * departments: Company organizational units.
+   * department: Company organizational units.
 
-   * salaries: Historical salary tracking (with start/end dates).
+   * salary: Historical salary(amount) tracking (with start/end dates).
 
-   * titles: Job titles and career progression.  
+   * title: Job titles and career progression.  
 
    * dept_emp & dept_manager: Junction tables linking staff to departments
 
