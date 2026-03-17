@@ -64,11 +64,11 @@ The hr_schema dataset mimics a real-world enterprise structure:
 #### 1. The High Earners
 Find the top 10 highest-paid employees currently active in the company:
 ```SQL
-SELECT e.first_name, e.last_name, s.salary 
-FROM employees e
-JOIN salaries s ON e.emp_no = s.emp_no
+SELECT e.first_name, e.last_name, s.amount 
+FROM employee e
+JOIN salary s ON e.emp_no = s.emp_no
 WHERE s.to_date = '9999-01-01'
-ORDER BY s.salary DESC
+ORDER BY s.amount DESC
 LIMIT 10;
 ```
 
@@ -76,10 +76,50 @@ LIMIT 10;
 Count how many employees are currently assigned to each department:
 ```SQL
 SELECT d.dept_name, COUNT(de.emp_no) as staff_count
-FROM departments d
+FROM department d
 JOIN dept_emp de ON d.dept_no = de.dept_no
 WHERE de.to_date = '9999-01-01'
 GROUP BY d.dept_name;
+```
+
+#### 3. Find the maximum salary that is strictly less than the overall maximum salary.
+#### Subquery approach
+```SQL
+SELECT e.first_name, e.last_name, s.amount
+FROM employee e
+JOIN salary s ON e.emp_no = s.emp_no
+WHERE 
+    s.amount = (
+    SELECT MAX(amount) 
+    FROM salary 
+    WHERE amount < (SELECT MAX(amount) FROM salary)
+);
+```
+
+#### Using LIMIT & OFFSET
+```SQL
+SELECT e.first_name, e.last_name, s.amount
+FROM employee e
+JOIN salary s ON e.emp_no = s.emp_no
+WHERE s.to_date = '9999-01-01'
+ORDER BY s.amount DESC
+LIMIT 1 OFFSET 1;
+```
+
+##### Using DENSE_RANK()
+```SQL
+SELECT first_name, last_name, amount
+FROM (
+    SELECT 
+        e.first_name, 
+        e.last_name, 
+        s.amount,
+        DENSE_RANK() OVER (ORDER BY s.amount DESC) as salary_rank
+    FROM employee e
+    JOIN salary s ON e.emp_no = s.emp_no
+    WHERE s.to_date = '9999-01-01'
+) ranked_salary
+WHERE salary_rank = 2;
 ```
 
 ---
