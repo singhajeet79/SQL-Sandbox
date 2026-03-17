@@ -1,1 +1,127 @@
-# SQL-Sandbox
+# 🧪 SQL-Sandbox: HR Edition
+
+A plug-and-play PostgreSQL environment pre-loaded with a high-quality employee dataset. Designed for data engineers, analysts, and DBAs to practice complex queries, indexing, and schema management without the setup headache.
+
+---
+
+## 🚀 Quick Start
+
+Ensure you have [Docker](https://docs.docker.com/get-docker/) installed, then run:
+
+```bash
+# Clone the repo and start the stack
+docker-compose up -d
+```
+The database will automatically initialize using the SQL scripts found in the /hr_schema directory.
+
+---
+
+## 🛠️ Connectivity
+#### Method A: Web GUI (pgAdmin)
+1. Open your browser to: http://localhost:5050
+
+2. Login Credentials:
+
+    * Email: admin@example.com
+
+    * Password: admin
+
+3. Connect to Server:
+
+   * Host: db (This is the internal Docker service name)
+
+   * Port: 5432
+
+   * Maintenance DB: employees
+
+   * Username/Password: admin / admin
+
+#### Method B: Terminal (psql)
+Access the database shell directly:
+```bash
+docker exec -it sql-db psql -U admin -d employees
+```
+
+---
+
+## 📊 Database Schema
+The hr_schema dataset mimics a real-world enterprise structure:
+
+   * employees: Core staff records (ID, birth date, names, hire date).
+
+   * departments: Company organizational units.
+
+   * salaries: Historical salary tracking (with start/end dates).
+
+   * titles: Job titles and career progression.  
+
+   * dept_emp & dept_manager: Junction tables linking staff to departments
+
+---
+
+## 📝 Practice Drills
+
+#### 1. The High Earners
+Find the top 10 highest-paid employees currently active in the company:
+```SQL
+SELECT e.first_name, e.last_name, s.salary 
+FROM employees e
+JOIN salaries s ON e.emp_no = s.emp_no
+WHERE s.to_date = '9999-01-01'
+ORDER BY s.salary DESC
+LIMIT 10;
+```
+
+#### 2. Department Breakdown
+Count how many employees are currently assigned to each department:
+```SQL
+SELECT d.dept_name, COUNT(de.emp_no) as staff_count
+FROM departments d
+JOIN dept_emp de ON d.dept_no = de.dept_no
+WHERE de.to_date = '9999-01-01'
+GROUP BY d.dept_name;
+```
+
+---
+
+## 🧹 Housekeeping
+Stop the services:
+
+```bash
+docker-compose stop
+```
+Wipe everything (including the database volume):
+*Use this if you want to force a fresh reload of the schema.*
+
+```bash
+docker-compose down -v
+```
+
+---
+
+## 🙏 Credits
+This lab uses a modified version of the Employee Sample Database, originally curated by Tianzhou. It provides a realistic distribution of data for testing SQL performance and logic.
+
+---
+
+## 📂 Repository Structure
+
+```Plaintext
+.
+├── docker-compose.yml
+├── hr-schema
+│   └── postgres
+│       └── dataset
+│           ├── employee.sql
+│           ├── load_department.sql
+│           ├── load_dept_emp.sql
+│           ├── load_dept_manager.sql
+│           ├── load_employee.sql
+│           ├── load_salary1.sql
+│           └── load_title.sql
+└── README.md
+```
+
+---
+#### Check out [My GitHub Page](https://singhajeet79.github.io/) for more AI/MLOps/Data Engineering projects.
+**Happy Engineering!** 🚀
