@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:15-alpine
+    image: postgres:15
     container_name: sql-db
+    working_dir: /data
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
@@ -16,7 +17,7 @@ services:
       - ./hr-schema/postgres/dataset:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d employees"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
 

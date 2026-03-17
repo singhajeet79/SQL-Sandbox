@@ -208,14 +208,14 @@ FROM
 		AND l.to_date = d.to_date;
 
 \echo 'LOADING department'
-\i load_department.sql
+\i /docker-entrypoint-initdb.d/data_load/load_department.sql
 \echo 'LOADING employee'
-\i load_employee.sql
+\i /docker-entrypoint-initdb.d/data_load/load_employee.sql
 \echo 'LOADING dept_emp'
-\i load_dept_emp.sql
+\i /docker-entrypoint-initdb.d/data_load/load_dept_emp.sql
 \echo 'LOADING dept_manager'
-\i load_dept_manager.sql
+\i /docker-entrypoint-initdb.d/data_load/load_dept_manager.sql
 \echo 'LOADING title'
-\i load_title.sql
+\i /docker-entrypoint-initdb.d/data_load/load_title.sql
 \echo 'LOADING salary'
-\i load_salary1.sql
+\i /docker-entrypoint-initdb.d/data_load/load_salary1.sql
