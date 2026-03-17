@@ -128,13 +128,13 @@ WHERE salary_rank = 2;
 Stop the services:
 
 ```bash
-docker-compose stop
+docker compose stop
 ```
 Wipe everything (including the database volume):
 *Use this if you want to force a fresh reload of the schema.*
 
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 
 ---
