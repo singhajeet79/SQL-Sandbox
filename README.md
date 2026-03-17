@@ -12,7 +12,7 @@ Ensure you have [Docker](https://docs.docker.com/get-docker/) installed, then ru
 # Clone the repo and start the stack
 docker compose up -d
 ```
-The database will automatically initialize using the SQL scripts found in the /hr_schema directory.
+The database will automatically initialize using the SQL scripts found in the /hr-schema directory.
 
 ---
 
@@ -45,7 +45,7 @@ docker exec -it sql-db psql -U admin -d employees
 ---
 
 ## 📊 Database Schema
-The hr_schema dataset mimics a real-world enterprise structure:
+The hr-schema dataset mimics a real-world enterprise structure:
 
    * employee: Core staff records (ID, birth date, names, hire date).
 
