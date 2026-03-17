@@ -109,19 +109,19 @@ This lab uses a modified version of the Employee Sample Database, originally cur
 ```Plaintext
 .
 ├── docker-compose.yml
-├── hr-schema
-│   └── postgres
-│       └── dataset
-│           ├── employee.sql
-│           ├── load_department.sql
-│           ├── load_dept_emp.sql
-│           ├── load_dept_manager.sql
-│           ├── load_employee.sql
-│           ├── load_salary1.sql
-│           └── load_title.sql
+├── .gitignore
+├── README.md
+└── hr-schema/
+    └── postgres/
+        └── dataset/
+            ├── employee.sql        # Main entry point script
+            └── data_load/          # Sub-scripts (ignored by Docker auto-run)
+                ├── load_department.sql
+                ├── load_employee.sql
+                └── ...
 └── README.md
 ```
 
 ---
-#### Check out [My GitHub Page](https://singhajeet79.github.io/) for more AI/MLOps/Data Engineering projects.
+#### Check out [My GitHub Page](https://singhajeet79.github.io/) for more AI/MLOps/Data Engineering projects!
 **Happy Engineering!** 🚀
