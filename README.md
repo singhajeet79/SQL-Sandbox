@@ -100,7 +100,7 @@ docker-compose down -v
 ---
 
 ## 🙏 Credits
-This lab uses a modified version of the Employee Sample Database, originally curated by Tianzhou. It provides a realistic distribution of data for testing SQL performance and logic.
+This lab uses a modified version of the Employee Sample Database, originally curated by Tianzhou (https://github.com/tianzhou). It provides a realistic distribution of data for testing SQL performance and logic.
 
 ---
 
