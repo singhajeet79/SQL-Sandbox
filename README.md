@@ -10,7 +10,7 @@ Ensure you have [Docker](https://docs.docker.com/get-docker/) installed, then ru
 
 ```bash
 # Clone the repo and start the stack
-docker-compose up -d
+docker compose up -d
 ```
 The database will automatically initialize using the SQL scripts found in the /hr_schema directory.
 
