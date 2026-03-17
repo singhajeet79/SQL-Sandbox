@@ -1,0 +1,12 @@
+# Docker Data
+pg-data/
+
+# Environment / IDE
+.env
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+*.log
+docker-compose.override.yml
