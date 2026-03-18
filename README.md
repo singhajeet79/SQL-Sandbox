@@ -1,4 +1,4 @@
-# 🧪 SQL-Sandbox: HR Edition
+# 🧪 SQL-Sandbox: Postgres with employees database. 
 
 A plug-and-play PostgreSQL environment pre-loaded with a high-quality employee dataset. Designed for data engineers, analysts, and DBAs to practice complex queries, indexing, and schema management without the setup headache.
 
