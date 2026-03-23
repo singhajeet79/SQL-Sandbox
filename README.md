@@ -34,44 +34,45 @@ docker logs -f sql-db
 Wait until you see: PostgreSQL init process complete; ready for start up.
 
 
-### 4.🖥️ How to Register in pgAdmin UI
+### 🖥️ How to Register in pgAdmin UI
 Once the containers are running, follow these steps to connect the GUI to your databases:
 
-Access pgAdmin: Open http://10.81.27.131:5050 (or your host IP).
+1. Access pgAdmin: Open http://<hostname>:5050 (or your host IP).
+```bash
+    Login:
 
-Login:
+    Email: admin@example.com
 
-Email: admin@example.com
+    Password: admin
 
-Password: admin
+    Register Server:
 
-Register Server:
+    Right-click Servers > Register > Server...
 
-Right-click Servers > Register > Server...
+    General Tab:
 
-General Tab:
+    Name: SQL-Sandbox-MultiDB
 
-Name: SQL-Sandbox-MultiDB
+    Connection Tab:
 
-Connection Tab:
+    Host name/address: sql-db
 
-Host name/address: sql-db
+    Port: 5432
 
-Port: 5432
+    Maintenance database: postgres
 
-Maintenance database: postgres
+    Username: admin
 
-Username: admin
+    Password: admin
 
-Password: admin
+    Save password: Check the box.
 
-Save password: Check the box.
+    Save: Click the Save button.
+```
+** Note: After saving, expand Databases in the left sidebar. If you don't see sakila or employee_example immediately, right-click Databases and select Refresh.**
 
-Save: Click the Save button.
-
-Note: After saving, expand Databases in the left sidebar. If you don't see sakila or employee_example immediately, right-click Databases and select Refresh.
-
-### 5. 📂 Project Structure (Feature Branch)
+### 📂 Project Structure (Feature Branch)
+```bash
 init-scripts/00-init.sh: Orchestrates the creation of multiple DBs and the postgres role.
 
 init-scripts/01-sakila-schema.sql: Definitions for the Sakila objects.
@@ -79,9 +80,9 @@ init-scripts/01-sakila-schema.sql: Definitions for the Sakila objects.
 init-scripts/02-sakila-data.sql: Massive data insert script for Sakila.
 
 init-scripts/03-example.sql: Your custom practice dataset.
+```
 
-
-### 6.🔄 Switching Back to Main
+### 🔄 Switching Back to Main
 If you need to return to the single employees (HR) database setup:
 ```bash
 git checkout main
