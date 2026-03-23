@@ -4,21 +4,22 @@ services:
   db:
     image: postgres:15
     container_name: sql-db
-    working_dir: /data
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: employees
+      # Set default database to 'postgres' since we are creating others via script
+      POSTGRES_DB: postgres 
     ports:
       - "5432:5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
-      # Maps your local dataset folder to the auto-init directory
-      - ./hr-schema/postgres/dataset:/docker-entrypoint-initdb.d
+      # NEW: Map the init-scripts folder to populate Sakila and Example DBs
+      - ./init-scripts:/docker-entrypoint-initdb.d
     networks:
-      - sql-sandbox-net 
+      - sql-sandbox-net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d employees"]
+      # Updated to check the 'postgres' database
+      test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -39,6 +40,7 @@ services:
 
 volumes:
   pg-data:
+
 networks:
   sql-sandbox-net:
     name: sql-sandbox-net

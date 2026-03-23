@@ -1,166 +1,96 @@
-# 🧪 SQL-Sandbox: PostgreSQL 
+# 🚀 SQL-Sandbox: Multi-DB Practice Lab
 
-A plug-and-play PostgreSQL environment pre-loaded with a high-quality employee dataset. Designed for data engineers, analysts, and DBAs to practice complex queries, indexing, and schema management without the setup headache.
+Welcome to the **Multi-DB Support** branch of the SQL-Sandbox. This environment is designed for advanced SQL practice, allowing you to work across multiple distinct database schemas within a single PostgreSQL instance.
+
+## 🏗️ Included Databases
+This branch automatically initializes three separate databases:
+1.  **postgres**: The default maintenance database.
+2.  **sakila**: The classic DVD rental store schema (Actors, Films, Inventory).
+3.  **employee_example**: A custom laboratory schema for join and aggregation practice.
 
 ---
 
-## 🚀 Quick Start
+## 🛠️ Quick Start
 
-Ensure you have [Docker](https://docs.docker.com/get-docker/) installed, then run:
+### 1. Prerequisites
+- Docker and Docker Compose installed.
+- Git (switched to `feature/multi-db-support` branch).
 
+### 2. Launch the Lab
+To ensure a clean initialization of all three databases, run:
 ```bash
-# Clone the repo and start the stack
+# Clear any existing volumes from other branches
+docker compose down -v
+
+# Start the environment
 docker compose up -d
 ```
-The database will automatically initialize using the SQL scripts found in the /hr-schema directory.
-
----
-
-## 🛠️ Connectivity
-#### Method A: Web GUI (pgAdmin)
-1. Open your browser to: http://localhost:5050
-
-2. Login Credentials:
-
-    * Email: admin@example.com
-
-    * Password: admin
-
-3. Connect to Server:
-
-   * Host: db (This is the internal Docker service name)
-
-   * Port: 5432
-
-   * Maintenance DB: employees
-
-   * Username/Password: admin / admin
-
-#### Method B: Terminal (psql)
-Access the database shell directly:
-```bash
-docker exec -it sql-db psql -U admin -d employees
-```
-
----
-
-## 📊 Database Schema
-The hr-schema dataset mimics a real-world enterprise structure:
-
-   * employee: Core staff records (ID, birth date, names, hire date).
-
-   * department: Company organizational units.
-
-   * salary: Historical salary(amount) tracking (with start/end dates).
-
-   * title: Job titles and career progression.  
-
-   * dept_emp & dept_manager: Junction tables linking staff to departments
-
----
-
-## 📝 Practice Drills
-
-#### 1. The High Earners
-Find the top 10 highest-paid employees currently active in the company:
-```SQL
-SELECT e.first_name, e.last_name, s.amount 
-FROM employee e
-JOIN salary s ON e.emp_no = s.emp_no
-WHERE s.to_date = '9999-01-01'
-ORDER BY s.amount DESC
-LIMIT 10;
-```
-
-#### 2. Department Breakdown
-Count how many employees are currently assigned to each department:
-```SQL
-SELECT d.dept_name, COUNT(de.emp_no) as staff_count
-FROM department d
-JOIN dept_emp de ON d.dept_no = de.dept_no
-WHERE de.to_date = '9999-01-01'
-GROUP BY d.dept_name;
-```
-
-#### 3. Find the maximum salary that is strictly less than the overall maximum salary.
-#### Subquery approach
-```SQL
-SELECT e.first_name, e.last_name, s.amount
-FROM employee e
-JOIN salary s ON e.emp_no = s.emp_no
-WHERE 
-    s.amount = (
-    SELECT MAX(amount) 
-    FROM salary 
-    WHERE amount < (SELECT MAX(amount) FROM salary)
-);
-```
-
-#### Using LIMIT & OFFSET
-```SQL
-SELECT e.first_name, e.last_name, s.amount
-FROM employee e
-JOIN salary s ON e.emp_no = s.emp_no
-WHERE s.to_date = '9999-01-01'
-ORDER BY s.amount DESC
-LIMIT 1 OFFSET 1;
-```
-
-##### Using DENSE_RANK()
-```SQL
-SELECT first_name, last_name, amount
-FROM (
-    SELECT 
-        e.first_name, 
-        e.last_name, 
-        s.amount,
-        DENSE_RANK() OVER (ORDER BY s.amount DESC) as salary_rank
-    FROM employee e
-    JOIN salary s ON e.emp_no = s.emp_no
-    WHERE s.to_date = '9999-01-01'
-) ranked_salary
-WHERE salary_rank = 2;
-```
-
----
-
-## 🧹 Housekeeping
-Stop the services:
+### 3. Verify Initialization
+The Sakila dataset is ~8MB. It may take 30–60 seconds to fully populate. Monitor the progress:
 
 ```bash
-docker compose stop
+docker logs -f sql-db
 ```
-Wipe everything (including the database volume):
-*Use this if you want to force a fresh reload of the schema.*
+Wait until you see: PostgreSQL init process complete; ready for start up.
 
+
+### 4.🖥️ How to Register in pgAdmin UI
+Once the containers are running, follow these steps to connect the GUI to your databases:
+
+Access pgAdmin: Open http://10.81.27.131:5050 (or your host IP).
+
+Login:
+
+Email: admin@example.com
+
+Password: admin
+
+Register Server:
+
+Right-click Servers > Register > Server...
+
+General Tab:
+
+Name: SQL-Sandbox-MultiDB
+
+Connection Tab:
+
+Host name/address: sql-db
+
+Port: 5432
+
+Maintenance database: postgres
+
+Username: admin
+
+Password: admin
+
+Save password: Check the box.
+
+Save: Click the Save button.
+
+Note: After saving, expand Databases in the left sidebar. If you don't see sakila or employee_example immediately, right-click Databases and select Refresh.
+
+### 5. 📂 Project Structure (Feature Branch)
+init-scripts/00-init.sh: Orchestrates the creation of multiple DBs and the postgres role.
+
+init-scripts/01-sakila-schema.sql: Definitions for the Sakila objects.
+
+init-scripts/02-sakila-data.sql: Massive data insert script for Sakila.
+
+init-scripts/03-example.sql: Your custom practice dataset.
+
+
+### 6.🔄 Switching Back to Main
+If you need to return to the single employees (HR) database setup:
 ```bash
+git checkout main
+
 docker compose down -v
+
+docker compose up -d
 ```
 
----
-
-## 🙏 Credits
-This lab uses a modified version of the Employee Sample Database, originally curated by [Tianzhou](https://github.com/tianzhou). It provides a realistic distribution of data for testing SQL performance and logic.
-
----
-
-## 📂 Repository Structure
-
-```Plaintext
-.
-├── docker-compose.yml
-├── .gitignore
-├── README.md
-└── hr-schema/
-    └── postgres/
-        └── dataset/
-            ├── employee.sql        # Main entry point script
-            └── data_load/          # Sub-scripts (ignored by Docker auto-run)
-                ├── load_department.sql
-                ├── load_employee.sql
-                └── ...
-└── README.md
-```
 
 ---
 #### Check out [My GitHub Page](https://singhajeet79.github.io/) for more AI/MLOps/Data Engineering projects!
