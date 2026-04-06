@@ -33,8 +33,6 @@ docker logs -f sql-db
 ```
 Wait until you see: PostgreSQL init process complete; ready for start up.
 
----
-
 ### 4. Command Line database access
 ```bash
 docker exec -it sql-db psql -U admin -d employee_example   ## to aceess employee_example database
@@ -42,9 +40,7 @@ OR
 docker exec -it sql-db psql -U admin -d sakila   ## to aceess sakila database
 OR
 OR docker exec -it sql-db psql -U admin -d postgres   ## to aceess maintenance instance
-
----
-
+```
 ### 🖥️ How to Register in pgAdmin UI
 Once the containers are running, follow these steps to connect the GUI to your databases:
 
